@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet & Savory Delights</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <style>
+        :root { --primary: #e67e22; --secondary: #2c3e50; --light: #f4f4f4; }
+        body { 
+            background-image: 
+            linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
+            url("background.jpg");   /* your image name */
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container { background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            padding: 2rem; 
+            border-radius: 20px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+            width: 90%; max-width: 500px; /* Fixed width for Login & Menu */ 
+            max-height: 85vh; /* Prevents page from being too long */ 
+            overflow-y: auto; /* Adds scrollbar inside the container */ 
+            text-align: center; 
+            color: white; 
+            box-sizing: border-box; 
+        }
+        #page2{
+            max-width: 900px;
+            max-height: none;
+            overflow: visible;
+        } 
+        .hidden { display: none; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #d35400; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        #page2 .grid{
+            grid-template-columns: repeat(4,1fr);
+        }
+        .card { border: 1px solid #eee; padding: 10px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .card:hover { border-color: var(--primary); transform: scale(1.02); }
+        .card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
+        .price { color: #27ae60; font-weight: bold; }
+        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
+        .success-text { color: #27ae60; font-size: 2rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="page1" class="container">
+        <h2>Welcome to FoodieExpress ♥️</h2>
+        <input type="text" id="username" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="password" id="password" placeholder="Password">
+        <p style="font-size: 0.8rem; color: #0c0c0c;">Hint: Any password works for this demo!</p>
+        <button onclick="toPage2()">Login & Verify</button>
+    </div>
+
+    <div id="page2" class="container hidden">
+        <h3>Select a Delicious Item</h3>
+        <div class="grid">
+            <div class="card" onclick="selectItem('Samosa', 15)">
+                <img src="samosa.jpg" class="food-img" alt="Samosa">
+                <div>Samosa</div><div class="price">₹15/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Jalebi', 20)">
+                <img src="jalebi.jpg" class="food-img" alt="Jalebi">
+                <div>Jalebi</div><div class="price">₹20/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Ras Malai', 40)">
+                <img src="rasmalai.jpg" class="food-img" alt="Ras Malai">
+                <div>Ras Malai</div><div class="price">₹40/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Rasgulla', 25)">
+                <img src="rasgulla.jpg" class="food-img" alt="Rasgulla">
+                <div>Rasgulla</div><div class="price">₹25/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Kaju Katli', 50)">
+                <img src="kaju_katli.jpg" class="food-img" alt="Kaju Katli">
+                <div>Kaju Katli</div><div class="price">₹50/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Gulab Jamun', 30)">
+                <img src="gullab_jamun.jpg" class="food-img" alt="Gulab Jamun">
+                <div>Gulab Jamun</div><div class="price">₹30/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Chai', 15)">
+                <img src="chai.jpg" class="food-img" alt="Chai">
+                <div>Chai</div><div class="price">₹15/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Laddu', 20)">
+                <img src="laddu.jpg" class="food-img" alt="Laddu">
+                <div>Laddu</div><div class="price">₹20/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Kachori', 10)">
+                <img src="kachori.jpg" class="food-img" alt="Kachori">
+                <div>Kachori</div><div class="price">₹10/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Shrikhand', 40)">
+                <img src="shrikhand.jpg" class="food-img" alt="Shrikhand">
+                <div>Shrikhand</div><div class="price">₹40/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Sonpapdi', 15)">
+                <img src="sonpapdi.jpg" class="food-img" alt="Sonpapdi">
+                <div>Sonpapdi</div><div class="price">₹15/pc</div>
+            </div>
+            <div class="card" onclick="selectItem('Gujiya', 20)">
+                <img src="gujiya.jpg" class="food-img" alt="Gujiya">
+                <div>Gujiya</div><div class="price">₹20/pc</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page3" class="container hidden">
+        <h3 id="selectedItemName">Item</h3>
+        <p>How many pieces would you like?</p>
+        <input type="number" id="quantity" value="1" min="1" oninput="calculateTotal()">
+        <hr>
+        <h4>Total Amount: ₹<span id="totalAmount">0</span></h4>
+        <p style="font-size: 0.8rem;">Scan to pay via UPI</p>
+        <div id="qrcode"></div>
+        <button onclick="toPage4()">I have Paid - Confirm Order</button>
+    </div>
+
+    <div id="page4" class="container hidden">
+        <div class="success-text">CONGRATULATIONS 🎉</div>
+        <p>Your order for <span id="finalQty"></span> <span id="finalItem"></span> has been placed successfully!</p>
+        <button onclick="location.reload()">Order More</button>
+    </div>
+
+    <script>
+        let selectedItem = "";
+        let itemPrice = 0;
+        let total = 0;
+        const upiID = "9721520557@ptaxis"; // Your ID from the image
+
+        function showPage(id) {
+            document.querySelectorAll('.container').forEach(p => p.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function toPage2() {
+            const user = document.getElementById('username').value;
+            if(!user) return alert("Please enter your name");
+            showPage('page2');
+        }
+
+        function selectItem(name, price) {
+            selectedItem = name;
+            itemPrice = price;
+            document.getElementById('selectedItemName').innerText = "Ordering " + name;
+            calculateTotal();
+            showPage('page3');
+        }
+
+        function calculateTotal() {
+            const qty = document.getElementById('quantity').value;
+            total = qty * itemPrice;
+            document.getElementById('totalAmount').innerText = total;
+            
+            // Generate UPI QR Code dynamically
+            document.getElementById('qrcode').innerHTML = "";
+            const upiLink = `upi://pay?pa=${upiID}&pn=Abhay%20Kumar%20Pandey&am=${total}&cu=INR`;
+            new QRCode(document.getElementById("qrcode"), {
+                text: upiLink,
+                width: 180,
+                height: 180
+            });
+        }
+
+        function toPage4() {
+            document.getElementById('finalQty').innerText = document.getElementById('quantity').value;
+            document.getElementById('finalItem').innerText = selectedItem;
+            showPage('page4');
+        }
+    </script>
+</body>
+</html>

@@ -208,28 +208,8 @@
 
             }
             catch(error){
-
-            try{
-
-            const userCredential = await signInWithEmailAndPassword(auth,email,password);
-
-            // CHECK IF EMAIL VERIFIED
-            await userCredential.user.reload();
-            if(!userCredential.user.emailVerified){
-                alert("Please verify your email first");
-                return;
-            }
-            alert("Login Successful");
-
-            showPage("page2");
-
-            }
-            catch(e){
-
-            alert("Invalid email or password");
-
-            }
-
+            console.log(error);
+            alert(error.message);
             }
 
         }           

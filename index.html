@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sweet & Savory Delights</title>
+
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #e67e22; --secondary: #2c3e50; --light: #f4f4f4; }
@@ -140,7 +141,48 @@
         <button onclick="location.reload()">Order More</button>
     </div>
 
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>    
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";        
+
+        import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        sendEmailVerification
+        } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+        import {
+        getFirestore,
+        addDoc,
+        collection
+        } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+        // Import the functions you need from the SDKs you need
+        
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4cA7AvwgPYEj4DaAQmIz6Z0BGsvByF94",
+            authDomain: "foodieexpress-11333.firebaseapp.com",
+            projectId: "foodieexpress-11333",
+            storageBucket: "foodieexpress-11333.firebasestorage.app",
+            messagingSenderId: "757410041330",
+            appId: "1:757410041330:web:ca5ba6ebfc91d041edaf6b",
+            measurementId: "G-70NL5BVEPF"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+    
+        // Your existing code
         let selectedItem = "";
         let itemPrice = 0;
         let total = 0;
@@ -151,11 +193,46 @@
             document.getElementById(id).classList.remove('hidden');
         }
 
-        function toPage2() {
-            const user = document.getElementById('username').value;
-            if(!user) return alert("Please enter your name");
-            showPage('page2');
-        }
+        async function toPage2(){
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try{
+
+            const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+
+            await sendEmailVerification(userCredential.user);
+
+            alert("Account created. Please verify your email.");
+
+            }
+            catch(error){
+
+            try{
+
+            const userCredential = await signInWithEmailAndPassword(auth,email,password);
+
+            // CHECK IF EMAIL VERIFIED
+            await userCredential.user.reload();
+            if(!userCredential.user.emailVerified){
+                alert("Please verify your email first");
+                return;
+            }
+            alert("Login Successful");
+
+            showPage("page2");
+
+            }
+            catch(e){
+
+            alert("Invalid email or password");
+
+            }
+
+            }
+
+        }           
 
         function selectItem(name, price) {
             selectedItem = name;
@@ -180,11 +257,29 @@
             });
         }
 
-        function toPage4() {
-            document.getElementById('finalQty').innerText = document.getElementById('quantity').value;
+        async function toPage4(){
+
+            const qty = document.getElementById("quantity").value;
+
+            await addDoc(collection(db,"orders"),{
+
+            item: selectedItem,
+            quantity: qty,
+            price: total,
+            time: new Date()
+
+            });
+
+            document.getElementById('finalQty').innerText = qty;
             document.getElementById('finalItem').innerText = selectedItem;
-            showPage('page4');
+
+            showPage("page4");
+
         }
+        window.toPage2 = toPage2;
+        window.toPage4 = toPage4;
+        window.selectItem = selectItem;
+        window.calculateTotal = calculateTotal;
     </script>
 </body>
 </html>
